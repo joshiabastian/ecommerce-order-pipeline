@@ -1,0 +1,5 @@
+google-cloud-pubsub
+confluent-kafka
+psycopg2-binary
+python-dotenv
+pandas
