@@ -64,6 +64,7 @@ def insert_users():
     print(f"{jumlah} users berhasil dimasukkan")
 
 
+# Dags insert users
 with DAG(
     dag_id="dag_insert_users",
     start_date=datetime(2026, 4, 1, tzinfo=timezone("Asia/Jakarta")),
