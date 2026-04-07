@@ -12,6 +12,7 @@ fake = Faker("id_ID")
 domain_email = ["gmail.com", "yahoo.com", "outlook.com"]
 
 
+# inisiasi untuk buat user baru
 def buat_user():
     nama = fake.name()
     username = nama.lower().replace(" ", ".") + str(random.randint(1, 999))
@@ -29,6 +30,7 @@ def buat_user():
     }
 
 
+# masukan data yang dibuat kedalam database
 def insert_users():
     pg = PostgresHook(postgres_conn_id="postgres_ecommerce")
     conn = pg.get_conn()
