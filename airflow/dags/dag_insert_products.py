@@ -9,7 +9,6 @@ import uuid
 
 fake = Faker("id_ID")
 
-# mapping kategori → brand & nama
 kategori_produk = {
     "Elektronik": ["Samsung", "Apple", "Sony", "LG", "Xiaomi", "ASUS", "Lenovo"],
     "Fashion": ["Zara", "H&M", "Uniqlo", "Erigo", "Nevada", "Lea"],
@@ -63,7 +62,7 @@ nama_produk = {
     "Otomotif": ["Oli Mesin", "Busi", "Ban Dalam", "Helm Full Face", "Aki Motor"],
 }
 
-# 🎯 harga per kategori (REALISTIS)
+
 price_range = {
     "Elektronik": (500000, 15000000),
     "Fashion": (50000, 500000),
