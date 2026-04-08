@@ -9,6 +9,7 @@ import uuid
 
 fake = Faker("id_ID")
 
+# mapping kategori → brand & nama
 kategori_produk = {
     "Elektronik": ["Samsung", "Apple", "Sony", "LG", "Xiaomi", "ASUS", "Lenovo"],
     "Fashion": ["Zara", "H&M", "Uniqlo", "Erigo", "Nevada", "Lea"],
@@ -62,20 +63,41 @@ nama_produk = {
     "Otomotif": ["Oli Mesin", "Busi", "Ban Dalam", "Helm Full Face", "Aki Motor"],
 }
 
+# 🎯 harga per kategori (REALISTIS)
+price_range = {
+    "Elektronik": (500000, 15000000),
+    "Fashion": (50000, 500000),
+    "Makanan & Minuman": (2000, 50000),
+    "Kesehatan": (10000, 300000),
+    "Olahraga": (100000, 2000000),
+    "Rumah Tangga": (50000, 2000000),
+    "Kecantikan": (20000, 500000),
+    "Otomotif": (50000, 2000000),
+}
+
 
 def buat_produk():
     kategori = random.choice(list(kategori_produk.keys()))
     brand = random.choice(kategori_produk[kategori])
     nama = random.choice(nama_produk[kategori])
 
+    # harga realistis
+    min_price, max_price = price_range[kategori]
+    price = random.randint(min_price, max_price)
+
+    # bikin harga "psikologis"
+    price = int(str(price)[:-2] + "99") if price > 100 else price
+
+    stock = random.randint(0, 500)
+
     return {
         "product_id": str(uuid.uuid4())[:8],
         "product_name": f"{brand} {nama}",
         "category": kategori,
         "brand": brand,
-        "price": round(random.uniform(10000, 15000000), 2),
-        "stock": random.randint(0, 500),
-        "is_available": random.choices([True, False], weights=[85, 15])[0],
+        "price": price,
+        "stock": stock,
+        "is_available": stock > 0,
         "created_date": datetime.now(),
     }
 
@@ -88,29 +110,37 @@ def insert_products():
     jumlah = random.randint(10, 50)
     data_products = [buat_produk() for _ in range(jumlah)]
 
-    for produk in data_products:
-        cursor.execute(
-            """
-            INSERT INTO products (product_id, product_name, category, brand, price, stock, is_available, created_date)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (product_id) DO NOTHING
-        """,
-            (
-                produk["product_id"],
-                produk["product_name"],
-                produk["category"],
-                produk["brand"],
-                produk["price"],
-                produk["stock"],
-                produk["is_available"],
-                produk["created_date"],
-            ),
+    # 🚀 bulk insert (lebih proper)
+    values = [
+        (
+            p["product_id"],
+            p["product_name"],
+            p["category"],
+            p["brand"],
+            p["price"],
+            p["stock"],
+            p["is_available"],
+            p["created_date"],
         )
+        for p in data_products
+    ]
+
+    cursor.executemany(
+        """
+        INSERT INTO products (
+            product_id, product_name, category, brand, price, stock, is_available, created_date
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (product_id) DO NOTHING
+        """,
+        values,
+    )
 
     conn.commit()
     cursor.close()
     conn.close()
-    print(f"{jumlah} produk berhasil dimasukkan")
+
+    print(f"Inserted {len(values)} products successfully")
 
 
 with DAG(
@@ -122,5 +152,6 @@ with DAG(
 ) as dag:
 
     task_insert_products = PythonOperator(
-        task_id="insert_products", python_callable=insert_products
+        task_id="insert_products",
+        python_callable=insert_products,
     )
