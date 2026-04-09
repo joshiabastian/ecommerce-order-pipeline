@@ -7,9 +7,6 @@ import random
 import uuid
 
 
-# ==================================================
-# Beauty product catalog only
-# ==================================================
 kategori_produk = {
     "Skincare": [
         ("Hydrating Essence", "Somethinc"),
@@ -43,9 +40,6 @@ kategori_produk = {
 }
 
 
-# ==================================================
-# Realistic price ranges
-# ==================================================
 price_range = {
     "Skincare": (50000, 5000000),
     "Lipstik": (35000, 650000),
@@ -78,9 +72,6 @@ def maintain_products():
     conn = pg.get_conn()
     cursor = conn.cursor()
 
-    # ==================================================
-    # 1. Warning kalau stock habis
-    # ==================================================
     cursor.execute(
         """
         SELECT product_id, product_name
@@ -94,9 +85,6 @@ def maintain_products():
     for product in out_of_stock:
         print(f"WARNING: Stock habis untuk {product[1]} ({product[0]})")
 
-    # ==================================================
-    # 2. Restock semua produk +50%
-    # ==================================================
     cursor.execute(
         """
         UPDATE products
@@ -107,9 +95,6 @@ def maintain_products():
 
     print("All products restocked by 50%")
 
-    # ==================================================
-    # 3. Insert 3 produk beauty baru
-    # ==================================================
     data_products = [buat_produk_baru() for _ in range(3)]
 
     values = [
