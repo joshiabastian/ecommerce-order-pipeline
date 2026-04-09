@@ -1,115 +1,117 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.hooks.postgres_hook import PostgresHook
-from faker import Faker
 from datetime import datetime
 from pendulum import timezone
 import random
 import uuid
 
-fake = Faker("id_ID")
 
+# ==================================================
+# Beauty product catalog only
+# ==================================================
 kategori_produk = {
-    "Elektronik": ["Samsung", "Apple", "Sony", "LG", "Xiaomi", "ASUS", "Lenovo"],
-    "Fashion": ["Zara", "H&M", "Uniqlo", "Erigo", "Nevada", "Lea"],
-    "Makanan & Minuman": ["Indofood", "Mayora", "Unilever", "Nestlé", "Garuda Food"],
-    "Kesehatan": ["Kimia Farma", "Kalbe", "Combiphar", "Konimex"],
-    "Olahraga": ["Nike", "Adidas", "Specs", "League", "Puma"],
-    "Rumah Tangga": ["Philips", "Panasonic", "Sharp", "Maspion", "Cosmos"],
-    "Kecantikan": ["Wardah", "Emina", "Pixy", "Maybelline", "L'Oréal"],
-    "Otomotif": ["Bosch", "NGK", "Federal", "Aspira", "Shell"],
-}
-
-nama_produk = {
-    "Elektronik": [
-        "Smartphone",
-        "Laptop",
-        "Tablet",
-        "Headphone",
-        "Smartwatch",
-        "Speaker Bluetooth",
+    "Skincare": [
+        ("Hydrating Essence", "Somethinc"),
+        ("Brightening Serum", "Skintific"),
+        ("Retinol Night Cream", "The Ordinary"),
+        ("Moisturizing Gel", "Wardah"),
+        ("Sunscreen SPF50", "Emina"),
     ],
-    "Fashion": [
-        "Kaos Polos",
-        "Kemeja Casual",
-        "Celana Jeans",
-        "Jaket Hoodie",
-        "Dress Casual",
+    "Lipstik": [
+        ("Matte Lip Cream", "Wardah"),
+        ("Velvet Lip Tint", "Emina"),
+        ("Soft Matte Lip Cream", "NYX"),
+        ("Luxury Lipstick", "MAC"),
     ],
-    "Makanan & Minuman": [
-        "Mie Instan",
-        "Kopi Sachet",
-        "Snack Keripik",
-        "Minuman Energi",
-        "Teh Celup",
+    "Makeup": [
+        ("Cushion Foundation", "Maybelline"),
+        ("BB Cream", "Wardah"),
+        ("Liquid Concealer", "NYX"),
+        ("Loose Powder", "Make Over"),
     ],
-    "Kesehatan": [
-        "Vitamin C",
-        "Masker Medis",
-        "Obat Flu",
-        "Suplemen Imun",
-        "Hand Sanitizer",
+    "Haircare": [
+        ("Hair Repair Serum", "Loreal"),
+        ("Scalp Shampoo", "Wardah"),
+        ("Hair Vitamin", "Ellips"),
     ],
-    "Olahraga": [
-        "Sepatu Running",
-        "Kaos Olahraga",
-        "Celana Training",
-        "Tas Gym",
-        "Topi Sport",
+    "Parfum": [
+        ("Body Mist Floral", "Scarlett"),
+        ("Luxury Eau De Parfum", "Chanel"),
+        ("Fresh Daily Mist", "Emina"),
     ],
-    "Rumah Tangga": ["Blender", "Rice Cooker", "Setrika", "Kipas Angin", "Lampu LED"],
-    "Kecantikan": ["Lipstik", "Foundation", "Serum Wajah", "Pelembab", "Sunscreen"],
-    "Otomotif": ["Oli Mesin", "Busi", "Ban Dalam", "Helm Full Face", "Aki Motor"],
 }
 
 
+# ==================================================
+# Realistic price ranges
+# ==================================================
 price_range = {
-    "Elektronik": (500000, 15000000),
-    "Fashion": (50000, 500000),
-    "Makanan & Minuman": (2000, 50000),
-    "Kesehatan": (10000, 300000),
-    "Olahraga": (100000, 2000000),
-    "Rumah Tangga": (50000, 2000000),
-    "Kecantikan": (20000, 500000),
-    "Otomotif": (50000, 2000000),
+    "Skincare": (50000, 5000000),
+    "Lipstik": (35000, 650000),
+    "Makeup": (50000, 850000),
+    "Haircare": (35000, 500000),
+    "Parfum": (55000, 2500000),
 }
 
 
-def buat_produk():
+def buat_produk_baru():
     kategori = random.choice(list(kategori_produk.keys()))
-    brand = random.choice(kategori_produk[kategori])
-    nama = random.choice(nama_produk[kategori])
+    nama, brand = random.choice(kategori_produk[kategori])
 
-    # harga realistis
     min_price, max_price = price_range[kategori]
-    price = random.randint(min_price, max_price)
-
-    # bikin harga "psikologis"
-    price = int(str(price)[:-2] + "99") if price > 100 else price
-
-    stock = random.randint(0, 500)
 
     return {
         "product_id": str(uuid.uuid4())[:8],
         "product_name": f"{brand} {nama}",
         "category": kategori,
         "brand": brand,
-        "price": price,
-        "stock": stock,
-        "is_available": stock > 0,
+        "price": round(random.randint(min_price, max_price), -3),
+        "stock": random.randint(50, 300),
+        "is_available": True,
         "created_date": datetime.now(),
     }
 
 
-def insert_products():
+def maintain_products():
     pg = PostgresHook(postgres_conn_id="postgres_ecommerce")
     conn = pg.get_conn()
     cursor = conn.cursor()
 
-    jumlah = random.randint(10, 50)
-    data_products = [buat_produk() for _ in range(jumlah)]
+    # ==================================================
+    # 1. Warning kalau stock habis
+    # ==================================================
+    cursor.execute(
+        """
+        SELECT product_id, product_name
+        FROM products
+        WHERE stock = 0
+        """
+    )
 
-    # 🚀 bulk insert (lebih proper)
+    out_of_stock = cursor.fetchall()
+
+    for product in out_of_stock:
+        print(f"WARNING: Stock habis untuk {product[1]} ({product[0]})")
+
+    # ==================================================
+    # 2. Restock semua produk +50%
+    # ==================================================
+    cursor.execute(
+        """
+        UPDATE products
+        SET stock = stock + CEIL(stock * 0.5),
+            is_available = TRUE
+        """
+    )
+
+    print("All products restocked by 50%")
+
+    # ==================================================
+    # 3. Insert 3 produk beauty baru
+    # ==================================================
+    data_products = [buat_produk_baru() for _ in range(3)]
+
     values = [
         (
             p["product_id"],
@@ -127,7 +129,14 @@ def insert_products():
     cursor.executemany(
         """
         INSERT INTO products (
-            product_id, product_name, category, brand, price, stock, is_available, created_date
+            product_id,
+            product_name,
+            category,
+            brand,
+            price,
+            stock,
+            is_available,
+            created_date
         )
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (product_id) DO NOTHING
@@ -139,7 +148,7 @@ def insert_products():
     cursor.close()
     conn.close()
 
-    print(f"Inserted {len(values)} products successfully")
+    print(f"Inserted {len(values)} new beauty products successfully")
 
 
 with DAG(
@@ -150,7 +159,7 @@ with DAG(
     tags=["batch", "products"],
 ) as dag:
 
-    task_insert_products = PythonOperator(
-        task_id="insert_products",
-        python_callable=insert_products,
+    task_maintain_products = PythonOperator(
+        task_id="maintain_products",
+        python_callable=maintain_products,
     )
