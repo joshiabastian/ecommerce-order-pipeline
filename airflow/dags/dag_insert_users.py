@@ -14,13 +14,14 @@ domain_email = ["gmail.com", "yahoo.com", "outlook.com"]
 
 def buat_user():
     nama = fake.name()
-    username = nama.lower().replace(" ", ".") + str(random.randint(1, 999))
+
+    username = nama.lower().replace(" ", "")[:10] + str(random.randint(1, 999))
     email = f"{username}@{random.choice(domain_email)}"
 
     gender = random.choices(["Perempuan", "Laki-laki"], weights=[70, 30])[0]
 
     return {
-        "user_id": str(uuid.uuid4())[:8],
+        "user_id": str(uuid.uuid4()).replace("-", "")[:16],
         "name": nama,
         "email": email,
         "phone_number": fake.phone_number(),
@@ -57,31 +58,25 @@ def insert_users():
         for user in data_users
     ]
 
-    cursor.executemany(
-        """
+    sql = """
         INSERT INTO users (
-            user_id,
-            name,
-            email,
-            phone_number,
-            address,
-            city,
-            age,
-            gender,
-            is_active,
-            created_date
+            user_id, name, email, phone_number, address, 
+            city, age, gender, is_active, created_date
         )
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (user_id) DO NOTHING
-        """,
-        values,
-    )
+        ON CONFLICT (email) DO NOTHING
+    """
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    print(f"Inserted {len(values)} users successfully")
+    try:
+        cursor.executemany(sql, values)
+        conn.commit()
+        print(f"Berhasil insert {cursor.rowcount} users.")
+    except Exception as e:
+        conn.rollback()
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
 
 
 with DAG(
