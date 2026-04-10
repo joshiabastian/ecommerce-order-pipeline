@@ -292,4 +292,4 @@ with DAG(
     catchup=False,
 ) as dag:
 
-    PythonOperator(task_id="insert_to_postgres", python_callable=insert_product_job)
+    PythonOperator(task_id="insert_products", python_callable=insert_product_job)
