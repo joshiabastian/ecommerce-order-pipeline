@@ -1,5 +1,6 @@
 apache-airflow-providers-google
 apache-airflow-providers-postgres
+apache-airflow-providers-telegram
 psycopg2-binary
 python-dotenv
 pandas  
