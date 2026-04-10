@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS products (
     price        NUMERIC(15, 2) NOT NULL,
     stock        INT NOT NULL DEFAULT 0,
     is_available BOOLEAN NOT NULL DEFAULT TRUE,
-    created_date TIMESTAMP NOT NULL DEFAULT NOW()
+    created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE (product_name, brand)
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -38,54 +39,57 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 
 
+
 INSERT INTO products (product_id, product_name, category, brand, price, stock, is_available, created_date) VALUES
 
 -- Skincare
-('SKC-001', 'Hydrating Serum 30ml', 'Skincare', 'Somethinc', 189000, 80, TRUE, NOW()),
-('SKC-002', 'Niacinamide Serum 20ml', 'Skincare', 'Somethinc', 159000, 500, TRUE, NOW()),
-('SKC-003', 'Moisture Bomb Toner', 'Skincare', 'Skintific', 135000, 300, TRUE, NOW()),
-('SKC-004', '5X Ceramide Serum', 'Skincare', 'Skintific', 179000, 250, TRUE, NOW()),
-('SKC-005', 'AHA BHA Peeling Solution', 'Skincare', 'The Ordinary', 245000, 150, TRUE, NOW()),
-('SKC-006', 'Retinol 0.5% Serum', 'Skincare', 'The Ordinary', 220000, 100, TRUE, NOW()),
-('SKC-007', 'Facial Treatment Essence', 'Skincare', 'SK-II', 1500000, 60, TRUE, NOW()),
-('SKC-008', 'Genoptics Aura Essence', 'Skincare', 'SK-II', 2000000, 50, TRUE, NOW()),
-('SKC-009', 'Creme de la Mer Moisturizer', 'Skincare', 'La Mer', 3000000, 30, TRUE, NOW()),
-('SKC-010', 'Regenerating Serum', 'Skincare', 'La Mer', 5000000, 20, TRUE, NOW()),
-('SKC-011', 'White Glow Serum', 'Skincare', 'Wardah', 89000, 600, TRUE, NOW()),
-('SKC-012', 'Acne Sunscreen SPF50', 'Skincare', 'Emina', 55000, 700, TRUE, NOW()),
-('SKC-013', 'Brightening Moisturizer', 'Skincare', 'Scarlett', 75000, 550, TRUE, NOW()),
-('SKC-014', 'Sunscreen Matte SPF45', 'Skincare', 'Scarlett', 85000, 450, TRUE, NOW()),
-('SKC-015', 'First Essence Treatment', 'Skincare', 'Sulwhasoo', 750000, 40, TRUE, NOW()),
+('SKC-a1b2c3d4', 'Hydrating Serum 30ml', 'Skincare', 'Somethinc', 189000, 80, TRUE, NOW()),
+('SKC-b2c3d4e5', 'Niacinamide Serum 20ml', 'Skincare', 'Somethinc', 159000, 500, TRUE, NOW()),
+('SKC-c3d4e5f6', 'Moisture Bomb Toner', 'Skincare', 'Skintific', 135000, 300, TRUE, NOW()),
+('SKC-d4e5f6a7', '5X Ceramide Serum', 'Skincare', 'Skintific', 179000, 250, TRUE, NOW()),
+('SKC-e5f6a7b8', 'AHA BHA Peeling Solution', 'Skincare', 'The Ordinary', 245000, 150, TRUE, NOW()),
+('SKC-f6a7b8c9', 'Retinol 0.5% Serum', 'Skincare', 'The Ordinary', 220000, 100, TRUE, NOW()),
+('SKC-a7b8c9d0', 'Facial Treatment Essence', 'Skincare', 'SK-II', 1500000, 60, TRUE, NOW()),
+('SKC-b8c9d0e1', 'Genoptics Aura Essence', 'Skincare', 'SK-II', 2000000, 50, TRUE, NOW()),
+('SKC-c9d0e1f2', 'Creme de la Mer Moisturizer', 'Skincare', 'La Mer', 3000000, 30, TRUE, NOW()),
+('SKC-d0e1f2a3', 'Regenerating Serum', 'Skincare', 'La Mer', 5000000, 20, TRUE, NOW()),
+('SKC-e1f2a3b4', 'White Glow Serum', 'Skincare', 'Wardah', 89000, 600, TRUE, NOW()),
+('SKC-f2a3b4c5', 'Acne Sunscreen SPF50', 'Skincare', 'Emina', 55000, 700, TRUE, NOW()),
+('SKC-a3b4c5d6', 'Brightening Moisturizer', 'Skincare', 'Scarlett', 75000, 550, TRUE, NOW()),
+('SKC-b4c5d6e7', 'Sunscreen Matte SPF45', 'Skincare', 'Scarlett', 85000, 450, TRUE, NOW()),
+('SKC-c5d6e7f8', 'First Essence Treatment', 'Skincare', 'Sulwhasoo', 750000, 40, TRUE, NOW()),
 
--- Lipstik & Lip Care
-('LIP-001', 'Exclusive Lip Color', 'Lipstik', 'Wardah', 45000, 800, TRUE, NOW()),
-('LIP-002', 'Matte Lip Cream', 'Lipstik', 'Emina', 40000, 750, TRUE, NOW()),
-('LIP-003', 'Soft Matte Lip Cream', 'Lipstik', 'NYX', 120000, 400, TRUE, NOW()),
-('LIP-004', 'Powder Kiss Lipstick', 'Lipstik', 'MAC', 350000, 200, TRUE, NOW()),
-('LIP-005', 'Rouge Allure Velvet', 'Lipstik', 'Chanel', 650000, 70, TRUE, NOW()),
-('LIP-006', 'Lip Sleeping Mask', 'Lip Care', 'Laneige', 250000, 300, TRUE, NOW()),
-('LIP-007', 'Lip Gloss Plumping', 'Lip Care', 'Emina', 35000, 600, TRUE, NOW()),
+-- Lipstik
+('LIP-a1b2c3d4', 'Exclusive Lip Color', 'Lipstik', 'Wardah', 45000, 800, TRUE, NOW()),
+('LIP-b2c3d4e5', 'Matte Lip Cream', 'Lipstik', 'Emina', 40000, 750, TRUE, NOW()),
+('LIP-c3d4e5f6', 'Soft Matte Lip Cream', 'Lipstik', 'NYX', 120000, 400, TRUE, NOW()),
+('LIP-d4e5f6a7', 'Powder Kiss Lipstick', 'Lipstik', 'MAC', 350000, 200, TRUE, NOW()),
+('LIP-e5f6a7b8', 'Rouge Allure Velvet', 'Lipstik', 'Chanel', 650000, 70, TRUE, NOW()),
+
+-- Lip Care
+('LPC-a1b2c3d4', 'Lip Sleeping Mask', 'Lip Care', 'Laneige', 250000, 300, TRUE, NOW()),
+('LPC-b2c3d4e5', 'Lip Gloss Plumping', 'Lip Care', 'Emina', 35000, 600, TRUE, NOW()),
 
 -- Makeup
-('MKP-001', 'Two Way Cake', 'Makeup', 'Wardah', 65000, 500, TRUE, NOW()),
-('MKP-002', 'BB Cream SPF30', 'Makeup', 'Emina', 50000, 600, TRUE, NOW()),
-('MKP-003', 'Fit Me Foundation', 'Makeup', 'Maybelline', 145000, 350, TRUE, NOW()),
-('MKP-004', 'Stay Matte Foundation', 'Makeup', 'NYX', 180000, 250, TRUE, NOW()),
-('MKP-005', 'Pro Filtir Foundation', 'Makeup', 'Fenty Beauty', 650000, 90, TRUE, NOW()),
-('MKP-006', 'Lasting Perfection Concealer', 'Makeup', 'Collection', 120000, 300, TRUE, NOW()),
-('MKP-007', 'Naked Eyeshadow Palette', 'Makeup', 'Urban Decay', 850000, 55, TRUE, NOW()),
+('MKP-a1b2c3d4', 'Two Way Cake', 'Makeup', 'Wardah', 65000, 500, TRUE, NOW()),
+('MKP-b2c3d4e5', 'BB Cream SPF30', 'Makeup', 'Emina', 50000, 600, TRUE, NOW()),
+('MKP-c3d4e5f6', 'Fit Me Foundation', 'Makeup', 'Maybelline', 145000, 350, TRUE, NOW()),
+('MKP-d4e5f6a7', 'Stay Matte Foundation', 'Makeup', 'NYX', 180000, 250, TRUE, NOW()),
+('MKP-e5f6a7b8', 'Pro Filtir Foundation', 'Makeup', 'Fenty Beauty', 650000, 90, TRUE, NOW()),
+('MKP-f6a7b8c9', 'Lasting Perfection Concealer', 'Makeup', 'Collection', 120000, 300, TRUE, NOW()),
+('MKP-a7b8c9d0', 'Naked Eyeshadow Palette', 'Makeup', 'Urban Decay', 850000, 55, TRUE, NOW()),
 
 -- Haircare
-('HRC-001', 'Hair Serum Anti Frizz', 'Haircare', 'Wardah', 55000, 500, TRUE, NOW()),
-('HRC-002', 'Hijab Fresh Shampoo', 'Haircare', 'Wardah', 35000, 700, TRUE, NOW()),
-('HRC-003', 'Total Repair Shampoo', 'Haircare', 'Loreal', 75000, 600, TRUE, NOW()),
-('HRC-004', 'Extraordinary Oil Serum', 'Haircare', 'Loreal', 150000, 350, TRUE, NOW()),
-('HRC-005', 'Scalp Treatment Tonic', 'Haircare', 'Sulwhasoo', 500000, 80, TRUE, NOW()),
+('HRC-a1b2c3d4', 'Hair Serum Anti Frizz', 'Haircare', 'Wardah', 55000, 500, TRUE, NOW()),
+('HRC-b2c3d4e5', 'Hijab Fresh Shampoo', 'Haircare', 'Wardah', 35000, 700, TRUE, NOW()),
+('HRC-c3d4e5f6', 'Total Repair Shampoo', 'Haircare', 'Loreal', 75000, 600, TRUE, NOW()),
+('HRC-d4e5f6a7', 'Extraordinary Oil Serum', 'Haircare', 'Loreal', 150000, 350, TRUE, NOW()),
+('HRC-e5f6a7f8', 'Scalp Treatment Tonic', 'Haircare', 'Sulwhasoo', 500000, 80, TRUE, NOW()),
 
 -- Parfum
-('PRF-001', 'Eau de Parfum Rose', 'Parfum', 'Scarlett', 150000, 200, TRUE, NOW()),
-('PRF-002', 'Body Mist Fresh', 'Parfum', 'Emina', 55000, 500, TRUE, NOW()),
-('PRF-003', 'Chance Eau Tendre', 'Parfum', 'Chanel', 2500000, 25, TRUE, NOW()),
-('PRF-004', 'Black Opium EDP', 'Parfum', 'YSL', 2000000, 30, TRUE, NOW())
+('PRF-a1b2c3d4', 'Eau de Parfum Rose', 'Parfum', 'Scarlett', 150000, 200, TRUE, NOW()),
+('PRF-b2c3d4e5', 'Body Mist Fresh', 'Parfum', 'Emina', 55000, 500, TRUE, NOW()),
+('PRF-c3d4e5f6', 'Chance Eau Tendre', 'Parfum', 'Chanel', 2500000, 25, TRUE, NOW()),
+('PRF-d4e5f6a7', 'Black Opium EDP', 'Parfum', 'YSL', 2000000, 30, TRUE, NOW())
 
-ON CONFLICT (product_id) DO NOTHING;
+ON CONFLICT (product_name, brand) DO NOTHING;
