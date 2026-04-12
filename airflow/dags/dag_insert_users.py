@@ -14,10 +14,8 @@ domain_email = ["gmail.com", "yahoo.com", "outlook.com"]
 
 def buat_user():
     nama = fake.name()
-
     username = nama.lower().replace(" ", "")[:10] + str(random.randint(1, 999))
     email = f"{username}@{random.choice(domain_email)}"
-
     gender = random.choices(["Perempuan", "Laki-laki"], weights=[70, 30])[0]
 
     return {
@@ -44,23 +42,23 @@ def insert_users():
 
     values = [
         (
-            user["user_id"],
-            user["name"],
-            user["email"],
-            user["phone_number"],
-            user["address"],
-            user["city"],
-            user["age"],
-            user["gender"],
-            user["is_active"],
-            user["created_date"],
+            u["user_id"],
+            u["name"],
+            u["email"],
+            u["phone_number"],
+            u["address"],
+            u["city"],
+            u["age"],
+            u["gender"],
+            u["is_active"],
+            u["created_date"],
         )
-        for user in data_users
+        for u in data_users
     ]
 
     sql = """
         INSERT INTO users (
-            user_id, name, email, phone_number, address, 
+            user_id, name, email, phone_number, address,
             city, age, gender, is_active, created_date
         )
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -70,7 +68,7 @@ def insert_users():
     try:
         cursor.executemany(sql, values)
         conn.commit()
-        print(f"Berhasil insert {cursor.rowcount} users.")
+        print(f"Berhasil insert {len(values)} users.")
     except Exception as e:
         conn.rollback()
         print(f"Error: {e}")
