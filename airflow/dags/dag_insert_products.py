@@ -197,7 +197,6 @@ def generate_product(existing_ids, existing_combos):
 
     base_name, base_price = random.choice(BRAND_PRODUCT_MAP[brand][category])
 
-    # tambah size untuk skincare, parfum, haircare
     if category in ["Skincare", "Parfum", "Haircare"]:
         size = random.choice(SIZE_OPTIONS)
         product_name = f"{base_name} {size}"
@@ -235,7 +234,6 @@ def insert_products():
     conn = pg.get_conn()
     cursor = conn.cursor()
 
-    # restock produk yang habis
     cursor.execute(
         """
         UPDATE products
@@ -244,7 +242,6 @@ def insert_products():
     """
     )
 
-    # tambah 50% stok untuk produk yang hampir habis
     cursor.execute(
         """
         UPDATE products
