@@ -27,7 +27,7 @@ def ambil_koneksi_db():
     )
 
 
-# cek fraud berdasarkan rules
+# cek fraud
 def cek_fraud(order):
     jam = datetime.fromisoformat(order["created_date"]).hour
     jam_rawan = 0 <= jam < 4
