@@ -1,11 +1,8 @@
-apache-airflow-providers-google==10.1.0
-apache-airflow-providers-postgres==5.10.0
-apache-airflow-providers-telegram==4.3.0
+apache-airflow-providers-google
+apache-airflow-providers-postgres
+apache-airflow-providers-telegram
 psycopg2-binary
 python-dotenv
 pandas
 requests
 faker
-grpcio-status>=1.62.0
-grpcio>=1.62.0
-googleapis-common-protos>=1.56.0
