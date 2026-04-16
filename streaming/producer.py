@@ -6,6 +6,7 @@ import random
 import json
 import time
 import os
+import uuid
 
 load_dotenv()
 
@@ -100,7 +101,7 @@ def buat_order(users, products):
 
         orders.append(
             {
-                "order_id": f"ORD-{int(time.time() * 1000)}-{random.randint(100, 999)}",
+                "order_id": f"ORD-{uuid.uuid4().hex[:12].upper()}",
                 "user_id": user_id,
                 "product_id": product_id,
                 "quantity": quantity,

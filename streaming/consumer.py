@@ -132,7 +132,9 @@ def insert_order(conn, order):
 # reconnect kalau koneksi putus
 def pastikan_koneksi(conn):
     try:
-        conn.cursor().execute("SELECT 1")
+        cur = conn.cursor()
+        cur.execute("SELECT 1")
+        cur.close()
         return conn
     except Exception:
         print("🔄 Koneksi PostgreSQL terputus, mencoba reconnect...")

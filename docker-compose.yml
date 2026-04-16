@@ -70,7 +70,7 @@ services:
   airflow-webserver:
     <<: *airflow-common
     container_name: ecommerce-airflow-webserver
-    command: bash -c "pip install -r /requirements.txt && airflow webserver"
+    command: bash -c "pip install --no-cache-dir -r /requirements.txt && airflow webserver"
     ports:
       - "8080:8080"
 
