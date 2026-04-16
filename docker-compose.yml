@@ -75,7 +75,7 @@ services:
   airflow-webserver:
     <<: *airflow-common
     container_name: ecommerce-airflow-webserver
-    command: webserver
+    command: bash -c "pip install --no-cache-dir -c https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.12.txt -r /requirements.txt && airflow webserver"
     ports:
       - "8080:8080"
     depends_on:
@@ -85,7 +85,7 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     container_name: ecommerce-airflow-scheduler
-    command: scheduler
+    command: bash -c "pip install --no-cache-dir -c https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.12.txt -r /requirements.txt && airflow scheduler"
     depends_on:
       airflow-init:
         condition: service_completed_successfully
