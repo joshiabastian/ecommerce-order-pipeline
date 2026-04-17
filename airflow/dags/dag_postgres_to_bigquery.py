@@ -58,11 +58,13 @@ def load_ke_bigquery(table, data):
     client = bigquery.Client(project=GCP_PROJECT)
     table_id = f"{GCP_PROJECT}.{BQ_DATASET}.{table}"
 
-    # convert datetime ke string
+    # convert datetime & decimal ke tipe yang bisa di-serialize
     for row in data:
         for key, val in row.items():
             if isinstance(val, datetime):
                 row[key] = val.isoformat()
+            elif isinstance(val, Decimal):
+                row[key] = float(val)
 
     # load incremental
     job_config = bigquery.LoadJobConfig(
