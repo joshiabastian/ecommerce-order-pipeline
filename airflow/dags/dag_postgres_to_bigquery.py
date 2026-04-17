@@ -4,6 +4,7 @@ from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime, timedelta
 from pendulum import timezone
 from google.cloud import bigquery
+from decimal import Decimal
 import requests
 import os
 
