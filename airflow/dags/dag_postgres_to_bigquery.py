@@ -65,7 +65,7 @@ def load_ke_bigquery(table, data):
             if isinstance(val, datetime):
                 row[key] = val.isoformat()
             elif isinstance(val, Decimal):
-                row[key] = float(val)
+                row[key] = int(val)
 
     # load incremental
     job_config = bigquery.LoadJobConfig(
