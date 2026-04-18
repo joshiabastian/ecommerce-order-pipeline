@@ -97,7 +97,7 @@ def buat_order(users, products):
             quantity = random.randint(1, 15)
 
         diskon = hitung_diskon(quantity)
-        amount = round(price * quantity * (1 - diskon), 2)
+        amount = round(float(price) * quantity * (1 - diskon), 2)
 
         orders.append(
             {
