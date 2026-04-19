@@ -119,7 +119,7 @@ def buat_order(users, products):
     for product_id, price in produk_dipilih:
         if jam_rawan:
             quantity = random.choices(
-                [random.randint(1, 15), random.randint(50, 200)], weights=[80, 20]
+                [random.randint(1, 15), random.randint(50, 200)], weights=[95, 5]
             )[0]
         else:
             quantity = random.randint(1, 15)
