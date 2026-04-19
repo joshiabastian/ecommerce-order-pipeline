@@ -94,14 +94,15 @@ def insert_order(conn, order):
             return
 
         status = cek_fraud(order)
+        updated_date = datetime.now().isoformat()
 
         cursor.execute(
             """
             INSERT INTO orders (
                 order_id, user_id, product_id, quantity, amount,
-                country, city, payment_method, device, created_date, status
+                country, city, payment_method, device, created_date, updated_date, status
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (order_id) DO NOTHING
             """,
             (
@@ -115,6 +116,7 @@ def insert_order(conn, order):
                 order["payment_method"],
                 order["device"],
                 order["created_date"],
+                updated_date,
                 status,
             ),
         )
