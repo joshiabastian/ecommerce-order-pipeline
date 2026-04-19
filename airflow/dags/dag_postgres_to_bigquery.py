@@ -71,9 +71,15 @@ def load_ke_bigquery(table, data):
             elif isinstance(val, Decimal):
                 row[key] = int(val)
 
+    # products pakai TRUNCATE biar stok selalu update, sisanya APPEND
+    if table == "products":
+        write_disposition = bigquery.WriteDisposition.WRITE_TRUNCATE
+    else:
+        write_disposition = bigquery.WriteDisposition.WRITE_APPEND
+
     # load incremental
     job_config = bigquery.LoadJobConfig(
-        write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+        write_disposition=write_disposition,
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
     )
 
