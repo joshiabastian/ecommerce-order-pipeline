@@ -69,6 +69,28 @@ def pilih_payment(quantity):
 
 
 # generate order
+KOTA_INDONESIA = [
+    "Jakarta",
+    "Bandung",
+    "Surabaya",
+    "Medan",
+    "Makassar",
+    "Semarang",
+    "Palembang",
+    "Tangerang",
+    "Depok",
+    "Bogor",
+]
+
+KOTA_LUAR_NEGERI = {
+    "US": ["New York", "Los Angeles", "Chicago", "Houston"],
+    "SG": ["Singapore"],
+    "MY": ["Kuala Lumpur", "Johor Bahru", "Penang"],
+    "AU": ["Sydney", "Melbourne", "Brisbane"],
+    "GB": ["London", "Manchester", "Birmingham"],
+}
+
+
 def buat_order(users, products):
     if not users or not products:
         print("⚠️ Tidak ada user atau produk tersedia.")
@@ -87,6 +109,12 @@ def buat_order(users, products):
         ["ID", "US", "SG", "MY", "AU", "GB"], weights=[90, 2, 2, 2, 2, 2]
     )[0]
 
+    # pilih kota sesuai negara
+    if country == "ID":
+        city = random.choice(KOTA_INDONESIA)
+    else:
+        city = random.choice(KOTA_LUAR_NEGERI.get(country, ["Unknown"]))
+
     orders = []
     for product_id, price in produk_dipilih:
         if jam_rawan:
@@ -98,6 +126,7 @@ def buat_order(users, products):
 
         diskon = hitung_diskon(quantity)
         amount = round(float(price) * quantity * (1 - diskon), 2)
+        now = datetime.now().isoformat()
 
         orders.append(
             {
@@ -107,23 +136,11 @@ def buat_order(users, products):
                 "quantity": quantity,
                 "amount": amount,
                 "country": country,
-                "city": random.choice(
-                    [
-                        "Jakarta",
-                        "Bandung",
-                        "Surabaya",
-                        "Medan",
-                        "Makassar",
-                        "Semarang",
-                        "Palembang",
-                        "Tangerang",
-                        "Depok",
-                        "Bogor",
-                    ]
-                ),
+                "city": city,
                 "payment_method": pilih_payment(quantity),
                 "device": random.choice(["mobile", "desktop", "tablet"]),
-                "created_date": datetime.now().isoformat(),
+                "created_date": now,
+                "updated_date": now,
             }
         )
 
