@@ -41,9 +41,14 @@ def ambil_data_postgres(table, tanggal_kemarin):
     pg = PostgresHook(postgres_conn_id="postgres_ecommerce")
     conn = pg.get_conn()
     cursor = conn.cursor()
-    cursor.execute(
-        f"SELECT * FROM {table} WHERE DATE(created_date) = %s", (tanggal_kemarin,)
-    )
+
+    if table == "products":
+        cursor.execute(f"SELECT * FROM {table}")
+    else:
+        cursor.execute(
+            f"SELECT * FROM {table} WHERE DATE(created_date) = %s", (tanggal_kemarin,)
+        )
+
     rows = cursor.fetchall()
     kolom = [desc[0] for desc in cursor.description]
     cursor.close()
