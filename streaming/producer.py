@@ -82,9 +82,9 @@ def buat_order(users, products):
     jam_sekarang = datetime.now().hour
     jam_rawan = 0 <= jam_sekarang < 4
 
-    # negara - 85% Indonesia, 15% luar (fraud bait)
+    # negara - 90% Indonesia, 10% luar (fraud bait)
     country = random.choices(
-        ["ID", "US", "SG", "MY", "AU", "GB"], weights=[85, 5, 4, 3, 2, 1]
+        ["ID", "US", "SG", "MY", "AU", "GB"], weights=[90, 2, 2, 2, 2, 2]
     )[0]
 
     orders = []
