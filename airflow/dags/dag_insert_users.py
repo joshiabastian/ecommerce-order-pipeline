@@ -16,6 +16,27 @@ TG_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 
+def kirim_notif_telegram(pesan):
+    if not TG_BOT_TOKEN or not TG_CHAT_ID:
+        print("Telegram belum dikonfigurasi, skip notifikasi.")
+        return
+    url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage"
+    requests.post(url, data={"chat_id": TG_CHAT_ID, "text": pesan})
+
+
+def on_failure(context):
+    dag_id = context["dag"].dag_id
+    task_id = context["task_instance"].task_id
+    exec_dt = context["execution_date"]
+    pesan = (
+        f"❌ DAG Gagal!\n"
+        f"DAG     : {dag_id}\n"
+        f"Task    : {task_id}\n"
+        f"Tanggal : {exec_dt}\n"
+    )
+    kirim_notif_telegram(pesan)
+
+
 def buat_user():
     nama = fake.name()
     username = nama.lower().replace(" ", "")[:10] + str(random.randint(1, 999))
@@ -79,6 +100,13 @@ def insert_users():
     finally:
         cursor.close()
         conn.close()
+
+
+default_args = {
+    "on_failure_callback": on_failure,
+    "retries": 2,
+    "retry_delay": timedelta(minutes=5),
+}
 
 
 with DAG(
