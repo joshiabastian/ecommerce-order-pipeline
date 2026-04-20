@@ -2,14 +2,18 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.hooks.postgres_hook import PostgresHook
 from faker import Faker
-from datetime import datetime
+from datetime import datetime, timedelta
 from pendulum import timezone
 import random
 import uuid
+import requests
+import os
 
 fake = Faker("id_ID")
-
 domain_email = ["gmail.com", "yahoo.com", "outlook.com"]
+
+TG_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TG_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 
 def buat_user():
