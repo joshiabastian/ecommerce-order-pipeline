@@ -12,6 +12,8 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     AIRFLOW__CORE__DEFAULT_TIMEZONE: Asia/Jakarta
     GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/credentials/service-account.json
+    TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+    TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/logs:/opt/airflow/logs
