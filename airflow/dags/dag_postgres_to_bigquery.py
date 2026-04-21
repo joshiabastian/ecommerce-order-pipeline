@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from pendulum import timezone
 from google.cloud import bigquery
 from decimal import Decimal
+import pendulum
 import requests
 import os
 
@@ -117,4 +118,5 @@ with DAG(
             task_id=f"ingest_{tabel}",
             python_callable=ingest_table,
             op_kwargs={"table": tabel},
+            on_failure_callback=on_failure,
         )

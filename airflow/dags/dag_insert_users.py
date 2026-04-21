@@ -4,6 +4,7 @@ from airflow.hooks.postgres_hook import PostgresHook
 from faker import Faker
 from datetime import datetime, timedelta
 from pendulum import timezone
+import pendulum
 import random
 import uuid
 import requests
@@ -53,12 +54,12 @@ def buat_user():
         "age": random.randint(15, 45),
         "gender": gender,
         "is_active": random.choices([True, False], weights=[90, 10])[0],
-        "created_date": datetime.now(),
+        "created_date": pendulum.now("Asia/Jakarta"),
     }
 
 
 def insert_users():
-    pg = PostgresHook(postgres_conn_id="postgres_ecommerce")
+    pg = PostgresHook(postgres_conn_id="postgres_salah")
     conn = pg.get_conn()
     cursor = conn.cursor()
 
@@ -97,6 +98,7 @@ def insert_users():
     except Exception as e:
         conn.rollback()
         print(f"Error: {e}")
+        raise
     finally:
         cursor.close()
         conn.close()
@@ -120,4 +122,5 @@ with DAG(
     task_insert_users = PythonOperator(
         task_id="insert_users",
         python_callable=insert_users,
+        on_failure_callback=on_failure,
     )

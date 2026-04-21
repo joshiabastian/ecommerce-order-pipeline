@@ -3,6 +3,7 @@ from airflow.operators.python import PythonOperator
 from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime, timedelta
 from pendulum import timezone
+import pendulum
 import random
 import uuid
 import requests
@@ -252,12 +253,12 @@ def generate_product(existing_ids, existing_combos):
         int(price),
         random.randint(50, 200),
         True,
-        datetime.now(),
+        pendulum.now("Asia/Jakarta"),
     )
 
 
 def insert_products():
-    pg = PostgresHook(postgres_conn_id="postgres_ecommerce")
+    pg = PostgresHook(postgres_conn_id="postgres_salah")
     conn = pg.get_conn()
     cursor = conn.cursor()
 
@@ -325,4 +326,5 @@ with DAG(
     task_insert_products = PythonOperator(
         task_id="insert_products",
         python_callable=insert_products,
+        on_failure_callback=on_failure,
     )
