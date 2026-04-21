@@ -10,7 +10,7 @@ import requests
 import os
 
 
-# (nama_produk, harga_base)
+# nama_produk, harga_base
 BRAND_PRODUCT_MAP = {
     "Somethinc": {
         "Skincare": [
