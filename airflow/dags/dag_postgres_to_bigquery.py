@@ -10,13 +10,15 @@ import os
 
 GCP_PROJECT = os.getenv("GCP_PROJECT_ID", "jcdeah-008")
 BQ_DATASET = os.getenv("GCP_DATASET", "yosia_finpro")
-TG_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-TG_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
 
 TABLES = ["users", "products", "orders"]
 
 
 def kirim_notif_telegram(pesan):
+    TG_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+    TG_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
     if not TG_BOT_TOKEN or not TG_CHAT_ID:
         print("Telegram belum dikonfigurasi, skip notifikasi.")
         return

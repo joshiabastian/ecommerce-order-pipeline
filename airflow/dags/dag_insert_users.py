@@ -12,11 +12,11 @@ import os
 fake = Faker("id_ID")
 domain_email = ["gmail.com", "yahoo.com", "outlook.com"]
 
-TG_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-TG_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-
 
 def kirim_notif_telegram(pesan):
+    TG_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+    TG_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
     if not TG_BOT_TOKEN or not TG_CHAT_ID:
         print("Telegram belum dikonfigurasi, skip notifikasi.")
         return
@@ -104,7 +104,7 @@ def insert_users():
 
 default_args = {
     "on_failure_callback": on_failure,
-    "retries": 2,
+    "retries": 0,
     "retry_delay": timedelta(minutes=5),
 }
 
