@@ -30,7 +30,7 @@ def kirim_notif_telegram(pesan):
 def on_failure(context):
     dag_id = context["dag"].dag_id
     task_id = context["task_instance"].task_id
-    exec_dt = context["execution_date"]
+    exec_dt = context["execution_date"].in_timezone("Asian/Jakarta")
     pesan = (
         f"❌ DAG Gagal!\n"
         f"DAG     : {dag_id}\n"

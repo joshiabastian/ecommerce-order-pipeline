@@ -201,7 +201,7 @@ def kirim_notif_telegram(pesan):
 def on_failure(context):
     dag_id = context["dag"].dag_id
     task_id = context["task_instance"].task_id
-    exec_dt = context["execution_date"]
+    exec_dt = context["execution_date"].in_timezone("Asia/Jakarta")
     pesan = (
         f"❌ DAG Gagal!\n"
         f"DAG     : {dag_id}\n"
@@ -258,54 +258,64 @@ def generate_product(existing_ids, existing_combos):
 
 
 def insert_products():
-    pg = PostgresHook(postgres_conn_id="postgres_salah")
+    pg = PostgresHook(postgres_conn_id="postgres_ecommerce")
     conn = pg.get_conn()
     cursor = conn.cursor()
 
-    cursor.execute(
+    try:
+        cursor.execute(
+            """
+            UPDATE products
+            SET stock = 100, is_available = TRUE
+            WHERE stock = 0
         """
-        UPDATE products
-        SET stock = 100, is_available = TRUE
-        WHERE stock = 0
-    """
-    )
+        )
 
-    cursor.execute(
+        cursor.execute(
+            """
+            UPDATE products
+            SET stock = stock + CEIL(stock * 0.5)::INT,
+                is_available = TRUE
+            WHERE stock > 0 AND stock <= 50
         """
-        UPDATE products
-        SET stock = stock + CEIL(stock * 0.5)::INT,
-            is_available = TRUE
-        WHERE stock > 0 AND stock <= 50
-    """
-    )
+        )
 
-    # ambil data existing buat cek duplikat
-    cursor.execute("SELECT product_id, product_name, brand FROM products")
-    rows = cursor.fetchall()
-    existing_ids = {r[0] for r in rows}
-    existing_combos = {(r[1], r[2]) for r in rows}
+        cursor.execute("SELECT product_id, product_name, brand FROM products")
+        rows = cursor.fetchall()
 
-    # generate & insert produk baru
-    new_products = []
-    for _ in range(random.randint(3, 5)):
-        p = generate_product(existing_ids, existing_combos)
-        if p:
-            new_products.append(p)
-            existing_ids.add(p[0])
-            existing_combos.add((p[1], p[3]))
+        existing_ids = {r[0] for r in rows}
+        existing_combos = {(r[1], r[2]) for r in rows}
 
-    if new_products:
-        sql = """
-            INSERT INTO products (product_id, product_name, category, brand, price, stock, is_available, created_date)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (product_name, brand) DO NOTHING
-        """
-        cursor.executemany(sql, new_products)
-        print(f"Berhasil insert {len(new_products)} produk baru.")
+        new_products = []
+        for _ in range(random.randint(3, 5)):
+            p = generate_product(existing_ids, existing_combos)
+            if p:
+                new_products.append(p)
+                existing_ids.add(p[0])
+                existing_combos.add((p[1], p[3]))
 
-    conn.commit()
-    cursor.close()
-    conn.close()
+        if new_products:
+            sql = """
+                INSERT INTO products (
+                    product_id, product_name, category, brand,
+                    price, stock, is_available, created_date
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (product_name, brand) DO NOTHING
+            """
+            cursor.executemany(sql, new_products)
+            print(f"Berhasil insert {len(new_products)} produk baru.")
+
+        conn.commit()
+
+    except Exception as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        raise
+
+    finally:
+        cursor.close()
+        conn.close()
 
 
 default_args = {
