@@ -94,7 +94,7 @@ def insert_order(conn, order):
             return
 
         status = cek_fraud(order)
-        updated_date = datetime.now().isoformat()
+        updated_date = datetime.now()
 
         cursor.execute(
             """
