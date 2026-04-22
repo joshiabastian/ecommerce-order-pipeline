@@ -126,7 +126,7 @@ def buat_order(users, products):
 
         diskon = hitung_diskon(quantity)
         amount = round(float(price) * quantity * (1 - diskon), 2)
-        now = datetime.now()
+        now = datetime.now().isoformat()
 
         orders.append(
             {

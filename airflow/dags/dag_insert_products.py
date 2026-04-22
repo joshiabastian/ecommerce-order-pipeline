@@ -320,7 +320,7 @@ def insert_products():
 
 default_args = {
     "on_failure_callback": on_failure,
-    "retries": 0,
+    "retries": 2,
     "retry_delay": timedelta(minutes=5),
 }
 
