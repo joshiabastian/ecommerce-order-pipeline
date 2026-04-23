@@ -7,6 +7,6 @@ ecommerce_finpro:
       project: jcdeah-008
       dataset: yosia_finpro
       keyfile: ../credentials/service-account.json
-      location: US
+      location: asia-southeast1
       threads: 4
       timeout_seconds: 300

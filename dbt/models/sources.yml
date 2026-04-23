@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: yosia_finpro
+    project: jcdeah-008
+    dataset: yosia_finpro
+    tables:
+      - name: users
+      - name: products
+      - name: orders
