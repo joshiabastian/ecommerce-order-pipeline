@@ -29,7 +29,7 @@ cleaned as (
             else false
         end as is_rawan,
 
-        -- selisih waktu producer → consumer dalam milidetik
+        -- selisih waktu producer dan consumer dalam milidetik
         timestamp_diff(updated_date, created_date, millisecond) as processing_time_ms
 
     from raw
