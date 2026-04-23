@@ -1,0 +1,29 @@
+name: "ecommerce_finpro"
+version: "1.0.0"
+config-version: 2
+
+profile: "ecommerce_finpro"
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  ecommerce_finpro:
+    preparation:
+      +materialized: view
+      +schema: yosia_finpro
+    dim_fact:
+      +materialized: table
+      +schema: yosia_finpro
+    datamart:
+      +materialized: table
+      +schema: yosia_finpro
