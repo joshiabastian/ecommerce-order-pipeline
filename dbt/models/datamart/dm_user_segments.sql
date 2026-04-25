@@ -5,7 +5,7 @@ with user_stats as (
     select
         user_id,
         user_name,
-        gender,
+        user_gender,
         age_group,
         count(*)                                            as total_orders,
         countif(status = 'frauds')                         as total_frauds,
@@ -17,7 +17,7 @@ with user_stats as (
         count(distinct payment_method)                     as unique_payment_methods
 
     from {{ ref('fact_orders') }}
-    group by user_id, user_name, gender, age_group
+    group by user_id, user_name, user_gender, age_group
 ),
 
 segmented as (

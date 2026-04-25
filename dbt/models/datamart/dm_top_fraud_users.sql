@@ -5,7 +5,7 @@ with fraud_orders as (
     select
         user_id,
         user_name,
-        gender,
+        user_gender,
         age_group,
         count(*)                as total_fraud_orders,
         sum(amount)             as total_fraud_amount,
@@ -14,7 +14,7 @@ with fraud_orders as (
         max(created_date)       as last_fraud_date
     from {{ ref('fact_orders') }}
     where status = 'frauds'
-    group by user_id, user_name, gender, age_group
+    group by user_id, user_name, user_gender, age_group
 ),
  
 all_orders as (
@@ -28,7 +28,7 @@ all_orders as (
 select
     f.user_id,
     f.user_name,
-    f.gender,
+    f.user_gender,
     f.age_group,
     f.total_fraud_orders,
     a.total_orders,
