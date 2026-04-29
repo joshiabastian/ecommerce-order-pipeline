@@ -20,7 +20,10 @@ models:
   ecommerce_finpro:
     preparation:
       +materialized: view
+      +schema: dwh_prep_yosia_finpro
     dim_fact:
       +materialized: table
+      +schema: dwh_dim_fact_yosia_finpro
     datamart:
       +materialized: table
+      +schema: dwh_datamart_yosia_finpro
