@@ -2,7 +2,7 @@
 
 **E-Commerce Order Pipeline — Batch & Streaming Fraud Detection**
 
-Pipeline data e-commerce berbasis tema Beauty/Kosmetik yang memproses transaksi secara batch dan streaming, dilengkapi deteksi fraud secara real-time.
+Pipeline data e-commerce berbasis tema Beauty yang memproses transaksi secara batch dan streaming, dilengkapi deteksi fraud secara real-time.
 
 > 📦 Final Project — Data Engineering Bootcamp  
 > Purwadhika Digital Technology School | Batch JCDEAH008  
