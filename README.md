@@ -295,7 +295,7 @@ Telegram notifikasi otomatis dikirim ketika **DAG gagal**, berisi:
 - Nama DAG & Task
 - Waktu eksekusi (WIB)
 
-![Telegram Notification](docs/telegram-notif.png)
+<img src="docs/telegram-notif.png" width="300"/>
 
 ---
 
