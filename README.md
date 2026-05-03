@@ -74,7 +74,7 @@ ecommerce-order-pipeline/
 ### Prerequisites
 
 - Docker Desktop + WSL2
-- Python 3.12
+- Python 3.15
 - GCP Service Account dengan akses BigQuery
 - Telegram Bot Token (opsional, untuk notifikasi)
 
