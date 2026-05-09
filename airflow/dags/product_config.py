@@ -1,3 +1,5 @@
+# nama produk, harga produk
+
 BRAND_PRODUCT_MAP = {
     "Somethinc": {
         "Skincare": [
