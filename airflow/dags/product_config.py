@@ -161,6 +161,8 @@ BRAND_PRODUCT_MAP = {
     },
 }
 
+# ukuran produk
+
 SIZE_OPTIONS = ["20ml", "30ml", "50ml", "100ml"]
 
 SIZE_MULTIPLIER = {
@@ -170,8 +172,11 @@ SIZE_MULTIPLIER = {
     "100ml": 2.0,
 }
 
+# warna produk
+
 WARNA_OPTIONS = ["Red", "Nude", "Pink", "Coral", "Brown", "Mauve", "Berry", "Rose"]
 
+# prefix untuk product_id
 PREFIX = {
     "Skincare": "SKC",
     "Lipstik": "LIP",
