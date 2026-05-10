@@ -102,6 +102,7 @@ def buat_order(users, products):
     produk_dipilih = random.sample(products, min(jumlah_produk, len(products)))
 
     jam_sekarang = datetime.now().hour
+    # jam_sekarang = 2
     jam_rawan = 0 <= jam_sekarang < 4
 
     # negara - 90% Indonesia, 10% luar (fraud bait)
