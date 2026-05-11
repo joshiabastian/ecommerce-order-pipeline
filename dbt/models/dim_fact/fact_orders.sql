@@ -15,21 +15,21 @@ products as (
     from {{ ref('dim_products') }}
 )
 
-select
+SELECT
     o.order_id,
     o.user_id,
-    u.name                  as user_name,
-    u.gender                as user_gender,
+    u.name                  AS user_name,
+    u.gender                AS user_gender,
     u.age_group,
     o.product_id,
     p.product_name,
-    p.category              as product_category,
+    p.category              AS product_category,
     p.brand,
     p.price_segment,
     o.quantity,
     o.amount,
     o.country,
-    o.city                  as order_city,
+    o.city                  AS order_city,
     o.payment_method,
     o.device,
     o.created_date,
@@ -39,6 +39,6 @@ select
     o.is_rawan,
     o.processing_time_ms
 
-from orders o
-left join users    u on o.user_id    = u.user_id
-left join products p on o.product_id = p.product_id
+FROM orders o
+LEFT JOIN users    u ON o.user_id    = u.user_id
+LEFT JOIN products p ON o.product_id = p.product_id
